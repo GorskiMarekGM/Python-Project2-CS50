@@ -3,5 +3,20 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <ul>
+        {% for auction in auctions %}
+        <div class="listening">
+            <h3>{{auction.name}}</h3>
+                
+            
+            <li>
+                Price: {{auction.price}}
+            </li>
+            <li>
+                Date of creation: {{auction.creation_date}}
+            </li>
+        </div>
+            
+        {% endfor %}
+    </ul>   
 {% endblock %}

@@ -8,21 +8,30 @@ class User(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=64)
 
+    def __str__(self):
+        return f"{self.name}"
+
 class Auction(models.Model):
     name = models.CharField(max_length=64)
-    price = models.IntegerField(max_length=10)
-    creation_date = models.TimeField()
+    price = models.IntegerField()
+    creation_date = models.DateTimeField()
     auction_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.id} {self.name}"
 
 class Bid(models.Model):
     price = models.IntegerField()
     auction_bid = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="bids")
     auctioner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctioner")
 
+    def __str__(self):
+        return f"{self.price}"
+
 class Comment(models.Model):
     commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
     comment_to = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="auction")
     text = models.TextField()
+
+    def __str__(self):
+        return f"{self.commenter} {self.comment_to} {self.text}"
