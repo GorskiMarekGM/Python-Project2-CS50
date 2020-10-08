@@ -11,14 +11,24 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+class Photo(models.Model):
+    image_name = models.TextField()
+    url = models.TextField()
+
+    def __str__(self):
+        return f"{self.url}"
+
+
 class Auction(models.Model):
     name = models.CharField(max_length=64)
     price = models.IntegerField()
     creation_date = models.DateTimeField()
+    photos = models.ManyToManyField(Photo, related_name='photos', blank=True)
     auction_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
 
     def __str__(self):
         return f"{self.id} {self.name}"
+
 
 class Bid(models.Model):
     price = models.IntegerField()

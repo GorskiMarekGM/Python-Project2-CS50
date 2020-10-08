@@ -1,11 +1,18 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2>Active Listings</h2>
 
     <ul>
+
         {% for auction in auctions %}
         <div class="listening">
+            
+            {% for n in auction.photos.all %}
+                <img src="{% static n.url %}">
+            {% endfor %}
+
             <h3>{{auction.name}}</h3>
                 
             

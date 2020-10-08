@@ -1,13 +1,15 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2>Create Listing</h2>
     <h3 style="color: red;">{{message}}</h3>
-    <form action="{% url 'create' %}" method="POST">
+    <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         Name: <input type="text" name="name"><br>
         Price: <input type="text" name="price"><br>
         <!--Date: <input type="date" name="date"><br>-->
+        Select image (optional)<input type="file" name="img"><br>
 
         Category:
         <select name="category">

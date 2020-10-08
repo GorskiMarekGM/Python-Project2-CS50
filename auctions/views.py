@@ -5,8 +5,9 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from datetime import datetime
+from django.core.files.storage import FileSystemStorage
 
-from .models import User, Auction, Category, Bid, Comment
+from .models import User, Auction, Category, Bid, Comment, Photo
 
 class EntityForm(forms.Form):
     name = forms.CharField(label = "name")
@@ -15,7 +16,8 @@ class EntityForm(forms.Form):
 
 def index(request):
     return render(request, "auctions/index.html",{
-        "auctions":Auction.objects.all()
+        "auctions":Auction.objects.all(),
+        "photos":Photo.objects.all(),
     })
 
 def create(request):
@@ -27,20 +29,48 @@ def create(request):
             price = form.cleaned_data["price"]
             date = datetime.now()
             category = form.cleaned_data["category"]
+
+            if(form.data["img"]):
+                photo = upload(request)
+
         else:
             message = "Invalid form... Try again."
             return render(request,"auctions/create.html",{
                 "form":form,
                 "message":message
             })
-        get_pk = Auction.objects.order_by('-pk')[0]
-        last_pk = get_pk.pk +1
-        new_auction = Auction(last_pk,name,price,date,category)
+
+        new_auction = Auction(getLastPk(Auction),name,price,date,category)
         new_auction.save()
+
+        if(form.data["img"]):
+            new_auction.photos.add(photo)
+            new_auction.save()
+        
 
     return render(request, "auctions/create.html",{
         "categories": Category.objects.all(),
     })
+
+def getLastPk(obj):
+    if(obj.objects.first() is None):
+        return 1
+    else:
+        get_pk = obj.objects.order_by('-pk')[0]
+        last_pk = get_pk.pk +1
+        return last_pk
+
+def upload(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['img']
+        fs = FileSystemStorage()
+        name = fs.save(uploaded_file.name, uploaded_file)
+        url = fs.url(name)
+        
+        photo = Photo(getLastPk(Photo),uploaded_file.name,url)
+        photo.save()
+
+        return photo
 
 #-------LOGIN PART------------
 def login_view(request):
