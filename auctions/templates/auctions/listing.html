@@ -21,7 +21,7 @@
                 </li>
 
                 {% if user.is_authenticated %}
-                    <a href="">Add to Whish List</a>
+                    <a href="{% url 'watchlist_add' auction.id %}">Add to Whish List</a>
                 {% endif %}
             </div>
             

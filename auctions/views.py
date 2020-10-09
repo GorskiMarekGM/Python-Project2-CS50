@@ -38,22 +38,14 @@ def listing(request, listing_id):
 
 def watchlist_add(request, auction_id):
     auction_to_save = Auction.objects.get(pk=auction_id)
-    # Check if the item already exists in that user watchlist
-    # if WatchList.objects.filter(user=request.user, auction=auction_id).exists():
-    #     messages.add_message(request, messages.ERROR, "You already have it in your watchlist.")
-    #     return HttpResponseRedirect(reverse("index"))
 
-    # Get the user watchlist or create it if it doesn't exists
-    user_list = WatchList.objects.get(user=request.user)
-
-    # Add the item through the ManyToManyField (WatchList => item)
-    user_list.add(auction_to_save)
-    user_list.save()
-    messages.add_message(request, messages.SUCCESS, "Successfully added to your watchlist")
+    watchlist = WatchList(getLastPk(WatchList),User,auction_to_save)
+    watchlist.save()
 
     return render(request, "auctions/watchlist.html",{
-        "watch_list" : user_list,
+        "watch_list" : WatchList.objects.all(),
     })
+
 
 def create(request):
     if request.method == "POST":

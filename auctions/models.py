@@ -48,7 +48,7 @@ class Comment(models.Model):
         return f"{self.commenter} {self.comment_to} {self.text}"
 
 class WatchList(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     auction = models.ManyToManyField(Auction, related_name="auctions")
     
     def __str__(self):
