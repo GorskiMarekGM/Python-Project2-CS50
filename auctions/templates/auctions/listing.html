@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Active Listing</h2>
+
+            <div class="listening">
+
+                {% for n in listing.photos.all %}
+                    <img src="{% static n.url %}" width="250" height="250">
+                {% endfor %}
+
+                <h3>{{listing.name}}</h3>
+                    
+                
+                <li>
+                    Price: {{listing.price}}
+                </li>
+                <li>
+                    Date of creation: {{listing.creation_date}}
+                </li>
+
+                {% if user.is_authenticated %}
+                    <a href="">Add to Whish List</a>
+                {% endif %}
+            </div>
+            
+{% endblock %}

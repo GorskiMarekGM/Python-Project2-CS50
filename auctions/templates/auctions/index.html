@@ -7,22 +7,28 @@
     <ul>
 
         {% for auction in auctions %}
-        <div class="listening">
-            
-            {% for n in auction.photos.all %}
-                <img src="{% static n.url %}">
-            {% endfor %}
+        <a href="{% url 'listing' auction.id %}">
+            <div class="listening">
 
-            <h3>{{auction.name}}</h3>
+                {% for n in auction.photos.all %}
+                    <img src="{% static n.url %}" width="250" height="250">
+                {% endfor %}
+
+                <h3>{{auction.name}}</h3>
+                    
                 
-            
-            <li>
-                Price: {{auction.price}}
-            </li>
-            <li>
-                Date of creation: {{auction.creation_date}}
-            </li>
-        </div>
+                <li>
+                    Price: {{auction.price}}
+                </li>
+                <li>
+                    Date of creation: {{auction.creation_date}}
+                </li>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'watchlist_add' auction.id %}">Add to Whish List</a>
+                {% endif %}
+            </div>
+        </a>
             
         {% endfor %}
     </ul>   

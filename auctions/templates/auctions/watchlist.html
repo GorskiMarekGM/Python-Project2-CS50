@@ -1,0 +1,10 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Watch List</h2>
+
+    {% for n in watch_list %}
+        {{n.name}}
+    {% endfor %}
+{% endblock %}

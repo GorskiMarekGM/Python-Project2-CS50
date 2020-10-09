@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 
 
 class User(AbstractUser):
@@ -45,3 +46,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.commenter} {self.comment_to} {self.text}"
+
+class WatchList(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    auction = models.ManyToManyField(Auction, related_name="auctions")
+    
+    def __str__(self):
+        return f"{self.user}'s watchlist'"
