@@ -8,12 +8,10 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("<int:listing_id>", views.listing, name="listing"),
-    path("bid", views.bid, name="bid"),
+    path("bid/<int:listing_id>", views.bid, name="bid"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path("watchList", views.index, name="watchList"),
-    path("watchList/add", views.wtadd, name="wtadd"),
     path("watchList/<int:auction_id>", views.watchlist_add, name="watchlist_add"),
     path("create", views.create, name="create"),
 ]

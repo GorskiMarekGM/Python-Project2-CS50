@@ -24,15 +24,11 @@
                     <a href="{% url 'watchlist_add' listing.id %}">Add to Whish List</a>
                 {% endif %}
                 
-                <form action="{% url 'wtadd' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{listing.id}}">{{listing.id}}</input>
-                    <input type="submit" value="Add">
-                </form>
 
                 <form action="{% url 'bid' %}" method="POST">
                     {% csrf_token %}
                     <input type="number" name="bid">Bid the price</input>
+                    <input type="hidden" name="auction_id" value="{{listing.id}}">{{listing.id}}</input>
                     <input type="submit" value="Add">
                 </form>
 
