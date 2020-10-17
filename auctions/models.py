@@ -23,6 +23,7 @@ class Photo(models.Model):
 class Auction(models.Model):
     name = models.CharField(max_length=64)
     price = models.IntegerField()
+    current_bid = models.IntegerField()
     creation_date = models.DateTimeField()
     photos = models.ManyToManyField(Photo, related_name='photos', blank=True)
     auction_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")

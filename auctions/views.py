@@ -45,20 +45,19 @@ def listing(request, listing_id):
 
 
 def bid(request):
-    if request.method == "POST":
-        # form = BidForm(request.POST)
-        # bid = form.data["bid"]
-        # auction_id = form.data["auction_id"]
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = BidForm(request.POST)
+            bid = form.data["bid"]
+            auction_id = form.data["auction_id"]
 
-        # auction = Auction.objects.get(pk=auction_id)
-        # bid = Bid(getLastPk(Bid),bid,auction_id,User)
-        # bid.save()
-        bids = models.Bids(id=id, owner=request.user, biddedschedule=biddedschedule)
-        bids.save()
-        return HttpResponse("OK")
+            auction = Auction.objects.get(pk=auction_id)
+            bid = Bid(id = getLastPk(Bid),price = bid, auction_bid = auction, auctioner = request.user)
+            bid.save()
 
-
-    return index
+    return render(request, "auctions/watchlist.html",{
+        "watch_list" : watchlist.auctions.all(),
+    })
     
 def watchlist_add(request, auction_id):
     if request.user.is_authenticated:
@@ -97,7 +96,7 @@ def create(request):
                 "message":message
             })
 
-        new_auction = Auction(getLastPk(Auction),name,price,date,category)
+        new_auction = Auction(getLastPk(Auction),name,price,0,date,category)
         new_auction.save()
 
         if(is_img_set):
