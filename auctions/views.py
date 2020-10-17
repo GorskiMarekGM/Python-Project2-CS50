@@ -14,6 +14,13 @@ class EntityForm(forms.Form):
     price = forms.CharField(label= "price")
     category = forms.CharField(label= "category")
 
+class WatchList_Id(forms.Form):
+    WatchList_Id = forms.IntegerField(label="id")
+
+class BidForm(forms.Form):
+    price = forms.IntegerField(label="price")
+    
+
 def index(request):
     return render(request, "auctions/index.html",{
         "auctions":Auction.objects.all(),
@@ -36,16 +43,48 @@ def listing(request, listing_id):
         "photos":Photo.objects.all(),
     })
 
+def bid(request):
+    if request.method == "POST":
+        form = BidForm(request.POST)
+
+        bid = form.data["bid"]
+    return index
+    
 def watchlist_add(request, auction_id):
     auction_to_save = Auction.objects.get(pk=auction_id)
 
-    watchlist = WatchList(getLastPk(WatchList),User,auction_to_save)
+    watchlist = WatchList(getLastPk(WatchList),User)
+    watchlist.save()
+    watchlist.auctions.add(auction_to_save)
     watchlist.save()
 
     return render(request, "auctions/watchlist.html",{
-        "watch_list" : WatchList.objects.all(),
+        "watch_list" : watchlist.auctions.all(),
     })
 
+def wtadd(request):
+    if request.method == "POST":
+        form = WatchList_Id(request.POST)
+
+        idadd = form.data["id"]
+
+        auction_to_save = Auction.objects.get(pk=idadd)
+
+        watchlist = WatchList(getLastPk(WatchList),User)
+        watchlist.save()
+        watchlist.auctions.add(auction_to_save)
+        watchlist.save()
+
+        return render(request, "auctions/watchlist.html",{
+            "watch_list" : watchlist.auctions.all(),
+        })
+    else:
+        return render(request, "auctions/index.html",{
+            "auctions":Auction.objects.all(),
+            "photos":Photo.objects.all(),
+        })
+    
+    return HttpResponse(idadd)
 
 def create(request):
     if request.method == "POST":

@@ -22,7 +22,7 @@ class PhotoAdmin(admin.ModelAdmin):
     list_display = ("id","image_name","url")
 
 class WatchAdmin(admin.ModelAdmin):
-   filter_horizontal = ("auction",)
+   filter_horizontal = ()
 
 
 admin.site.register(Bid,BidAdmin)

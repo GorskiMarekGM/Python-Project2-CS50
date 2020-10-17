@@ -49,7 +49,7 @@ class Comment(models.Model):
 
 class WatchList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
-    auction = models.ManyToManyField(Auction, related_name="auctions")
+    auctions = models.ManyToManyField(Auction, related_name="auctions", blank=True)
     
     def __str__(self):
         return f"{self.user}'s watchlist'"
