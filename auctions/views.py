@@ -46,18 +46,45 @@ def listing(request, listing_id):
 
 def bid(request):
     if request.user.is_authenticated:
+        
         if request.method == "POST":
             form = BidForm(request.POST)
-            bid = form.data["bid"]
+            bid_price = int(form.data["bid"])
             auction_id = form.data["auction_id"]
-
             auction = Auction.objects.get(pk=auction_id)
-            bid = Bid(id = getLastPk(Bid),price = bid, auction_bid = auction, auctioner = request.user)
-            bid.save()
+            auction_bid = auction.current_bid
+            auction_price = auction.price
 
-    return render(request, "auctions/watchlist.html",{
-        "watch_list" : watchlist.auctions.all(),
-    })
+            message =""
+            
+            listing = Auction.objects.get(pk=auction_id)
+
+            if(bid_price > auction_price):
+                if (bid_price > auction_bid):
+                    auction.current_bid = bid_price
+                    auction.save()
+
+                    bid_obj = Bid(id = getLastPk(Bid),price = bid_price, auction_bid = auction, auctioner = request.user)
+                    bid_obj.save()
+
+                    message ="Success"
+            else:
+                message = "Your bid is lower then current value"
+
+            
+
+            return redirect('listing', listing_id = auction_id)
+
+            # return render(request, "url 'listing' auction.id",{
+            #     "listing":listing,
+            #     "photos":Photo.objects.all(),
+            #     "message":message,
+            #    })
+    else:
+        message="you are not authenticated"
+        return index
+
+    
     
 def watchlist_add(request, auction_id):
     if request.user.is_authenticated:

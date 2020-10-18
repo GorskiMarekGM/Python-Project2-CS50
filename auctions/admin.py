@@ -4,7 +4,7 @@ from .models import Bid, Auction, Comment, Category, User, Photo, WatchList
 # Register your models here.
 
 class AuctionAdmin(admin.ModelAdmin):
-    list_display = ("id","name","price","creation_date","auction_category")
+    list_display = ("id","name","price","current_bid","creation_date","auction_category")
 
 #class AuctionAdmin(admin.ModelAdmin):
 #    filter_horizontal = ("photos",)

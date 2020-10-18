@@ -9,17 +9,25 @@
                 {% for n in listing.photos.all %}
                     <img src="{% static n.url %}" width="250" height="250">
                 {% endfor %}
+                
+
+                {% if message %}
+                    <div>{{ message }}</div>
+                {% endif %}
+
 
                 <h3>{{listing.name}}</h3>
                     
                 
                 <li>
-                    Price: {{listing.price}}
+                    Starting price: {{listing.price}}
                 </li>
                 <li>
                     Date of creation: {{listing.creation_date}}
                 </li>
-
+                <li>
+                    Current bid: {{listing.current_bid}}
+                </li>
                 {% if user.is_authenticated %}
                     <a href="{% url 'watchlist_add' listing.id %}">Add to Whish List</a>
                 {% endif %}
@@ -28,7 +36,7 @@
                 <form action="{% url 'bid' %}" method="POST">
                     {% csrf_token %}
                     <input type="number" name="bid">Bid the price</input>
-                    <input type="hidden" name="auction_id" value="{{listing.id}}">{{listing.id}}</input>
+                    <input type="hidden" name="auction_id" value="{{listing.id}}"></input>
                     <input type="submit" value="Add">
                 </form>
 
