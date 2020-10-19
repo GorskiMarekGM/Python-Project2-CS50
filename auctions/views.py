@@ -6,6 +6,7 @@ from django.urls import reverse
 from django import forms
 from datetime import datetime
 from django.core.files.storage import FileSystemStorage
+from django.contrib import messages
 
 from .models import User, Auction, Category, Bid, Comment, Photo, WatchList
 
@@ -43,6 +44,15 @@ def listing(request, listing_id):
         "photos":Photo.objects.all(),
     })
 
+def categories(request):
+    return render(request, "auctions/categories.html",{
+        "categories":Category.objects.all(),
+    })
+
+def categories_choose(request,category_id):
+    return render(request, "auctions/categories.html",{
+        "categories":Category.objects.all(),
+    })
 
 def bid(request):
     if request.user.is_authenticated:
@@ -67,21 +77,15 @@ def bid(request):
                     bid_obj = Bid(id = getLastPk(Bid),price = bid_price, auction_bid = auction, auctioner = request.user)
                     bid_obj.save()
 
-                    message ="Success"
+                    messages.add_message(request, messages.INFO, "Successfully placed bid")
             else:
-                message = "Your bid is lower then current value"
-
-            
+                messages.add_message(request, messages.INFO, "Your bid is lower then current value") 
 
             return redirect('listing', listing_id = auction_id)
 
-            # return render(request, "url 'listing' auction.id",{
-            #     "listing":listing,
-            #     "photos":Photo.objects.all(),
-            #     "message":message,
-            #    })
+
     else:
-        message="you are not authenticated"
+        messages.add_message(request, messages.INFO, "you are not authenticated") 
         return index
 
 def watchlist(request):

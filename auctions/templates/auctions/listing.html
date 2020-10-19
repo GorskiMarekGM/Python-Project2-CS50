@@ -4,6 +4,14 @@
 {% block body %}
     <h2>Active Listing</h2>
 
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
             <div class="listening">
 
                 {% for n in listing.photos.all %}
@@ -11,10 +19,7 @@
                 {% endfor %}
                 
 
-                {% if message %}
-                    <div>{{ message }}</div>
-                {% endif %}
-
+                
 
                 <h3>{{listing.name}}</h3>
                     
