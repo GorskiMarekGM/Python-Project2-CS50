@@ -27,6 +27,7 @@ class Auction(models.Model):
     creation_date = models.DateTimeField()
     photos = models.ManyToManyField(Photo, related_name='photos', blank=True)
     auction_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="creator")
 
     def __str__(self):
         return f"{self.id} {self.name}"

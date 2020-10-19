@@ -50,8 +50,11 @@ def categories(request):
     })
 
 def categories_choose(request,category_id):
-    return render(request, "auctions/categories.html",{
-        "categories":Category.objects.all(),
+    auctions_by_cat = Auction.objects.filter(auction_category=category_id)
+
+    return render(request, "auctions/index.html",{
+        "auctions":auctions_by_cat,
+        "photos":Photo.objects.all(),
     })
 
 def bid(request):
@@ -126,8 +129,8 @@ def create(request):
         form = EntityForm(request.POST)
         message=""
         #checks if img exists
-        is_img_set = request.POST.get('img', False)
-
+        is_img_set = request.FILES.get('img', False)
+        
         if form.is_valid():
             name = form.cleaned_data["name"]
             price = form.cleaned_data["price"]
@@ -143,13 +146,15 @@ def create(request):
                 "form":form,
                 "message":message
             })
-
+            
         new_auction = Auction(getLastPk(Auction),name,price,0,date,category)
+        new_auction.creator = request.user
         new_auction.save()
 
         if(is_img_set):
             new_auction.photos.add(photo)
             new_auction.save()
+        return redirect('index')
         
 
     return render(request, "auctions/create.html",{
