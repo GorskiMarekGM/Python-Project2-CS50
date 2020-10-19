@@ -7,6 +7,7 @@ from django import forms
 from datetime import datetime
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
+from django.db.models import Max
 
 from .models import User, Auction, Category, Bid, Comment, Photo, WatchList
 
@@ -55,6 +56,21 @@ def categories_choose(request,category_id):
     return render(request, "auctions/index.html",{
         "auctions":auctions_by_cat,
         "photos":Photo.objects.all(),
+    })
+
+def close(request,listing_id):
+    auction = Auction.objects.get(pk=listing_id)
+    bids = Bid.objects.filter(auction_bid=auction)
+    max_price = bids.order_by('-price')[0]
+    winner = User
+    
+    for bid in bids:
+        if bid.price == max_price.price:
+            winner = bid.auctioner
+
+    return render(request, "auctions/close.html",{
+        "max_price": max_price,
+        "winner":winner
     })
 
 def bid(request):

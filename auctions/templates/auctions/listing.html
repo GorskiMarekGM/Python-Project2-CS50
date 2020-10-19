@@ -37,8 +37,8 @@
                     <a href="{% url 'watchlist_add' listing.id %}">Add to Watch List</a>
                 {% endif %}
 
-                {% if user.is_authenticated %}
-                    Close Auction
+                {% if user == listing.creator %}
+                    <a href="{% url 'close' listing.id %}">Close Auction</a>
                 {% endif %}
                 
 
