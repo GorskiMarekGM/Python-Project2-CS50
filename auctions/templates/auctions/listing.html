@@ -48,6 +48,26 @@
                     <input type="hidden" name="auction_id" value="{{listing.id}}"></input>
                     <input type="submit" value="Add">
                 </form>
+                
+                <br>
+                Comment this auction:<br>
+                <form action="{% url 'auction_comment' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="text"></input>
+                    <input type="hidden" name="auction_id" value="{{listing.id}}"></input>
+                    <input type="submit" value="Add">
+                </form>
+
+                {% if comments %}
+                    {% for com in comments.all %}
+                    <div class="comment">
+                        {{com.text}}
+                        <br>
+                        User: {{com.commenter}}
+                        <br>
+                    </div>
+                    {% endfor%}
+                {% endif %}
 
             </div>
             

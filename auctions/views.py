@@ -22,6 +22,9 @@ class WatchList_Id(forms.Form):
 class BidForm(forms.Form):
     price = forms.IntegerField(label="price")
     
+class ComForm(forms.Form):
+    text = forms.Textarea()
+    
 
 def index(request):
     return render(request, "auctions/index.html",{
@@ -39,10 +42,12 @@ def getLastPk(obj):
 
 def listing(request, listing_id):
     listing = Auction.objects.get(pk=listing_id)
+    comments = Comment.objects.filter(comment_to=listing)
 
     return render(request, "auctions/listing.html",{
         "listing":listing,
         "photos":Photo.objects.all(),
+        "comments": comments
     })
 
 def categories(request):
@@ -57,6 +62,21 @@ def categories_choose(request,category_id):
         "auctions":auctions_by_cat,
         "photos":Photo.objects.all(),
     })
+
+def auction_comment(request,listing_id):
+    
+    listing = Auction.objects.get(pk=listing_id)
+
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ComForm(request.POST)
+            text = form.data["text"]
+            com = Comment(id = getLastPk(Comment), commenter=request.user, comment_to=listing,text=text)
+            com.save()
+            
+            return redirect('listing', listing_id = listing_id)
+            
+
 
 def close(request,listing_id):
     auction = Auction.objects.get(pk=listing_id)

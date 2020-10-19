@@ -14,3 +14,11 @@ body {
 .messages{
     color: green;
 }
+.comment{
+    padding: 20px;
+    border-width: 1px;
+    border-style: solid;
+    margin: 5px;
+    background-color: grey;
+    color: lavender;
+}
