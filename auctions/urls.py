@@ -12,7 +12,9 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path("watchList/<int:auction_id>", views.watchlist_add, name="watchlist_add"),
+    path("watchlist", views.watchlist, name="watchlist"),
+    path("watchlist/<int:auction_id>", views.watchlist_add, name="watchlist_add"),
+    path("watchlist_remove/<int:auction_id>", views.watchlist_remove, name="watchlist_remove"),
     path("create", views.create, name="create"),
 ]
 if settings.DEBUG:

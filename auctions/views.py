@@ -84,12 +84,21 @@ def bid(request):
         message="you are not authenticated"
         return index
 
-    
-    
+def watchlist(request):
+    watchlist = WatchList.objects.get(user = request.user)
+
+    return render(request, "auctions/watchlist.html",{
+        "watch_list" : watchlist.auctions.all(),
+    })
+
 def watchlist_add(request, auction_id):
     if request.user.is_authenticated:
 
-        watchlist = WatchList(id = getLastPk(WatchList),user = request.user)
+        if WatchList.objects.filter(user=request.user).exists():
+            watchlist = WatchList.objects.get(user = request.user)
+        else:
+            watchlist = WatchList(id = getLastPk(WatchList),user = request.user)
+
         auction_to_save = Auction.objects.get(id=auction_id)    
         watchlist.save()
         watchlist.auctions.add(auction_to_save)
@@ -99,6 +108,14 @@ def watchlist_add(request, auction_id):
         "watch_list" : watchlist.auctions.all(),
     })
 
+def watchlist_remove(request, auction_id):
+    if request.user.is_authenticated:
+        user = request.user
+        user_watchlist = WatchList.objects.filter(user=user)[0]
+
+        user_watchlist.auctions.filter(id=auction_id).delete()
+
+    return redirect('watchlist')
 
 def create(request):
     if request.method == "POST":
