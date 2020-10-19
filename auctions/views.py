@@ -67,6 +67,8 @@ def close(request,listing_id):
     for bid in bids:
         if bid.price == max_price.price:
             winner = bid.auctioner
+            auction = Auction(winner=winner,available=False)
+            auction.save()
 
     return render(request, "auctions/close.html",{
         "max_price": max_price,
@@ -163,7 +165,7 @@ def create(request):
                 "message":message
             })
             
-        new_auction = Auction(getLastPk(Auction),name,price,0,date,category)
+        new_auction = Auction(getLastPk(Auction),name,price,0,date,True,category)
         new_auction.creator = request.user
         new_auction.save()
 
