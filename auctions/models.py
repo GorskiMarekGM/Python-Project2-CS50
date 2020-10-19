@@ -22,7 +22,6 @@ class Photo(models.Model):
 
 class Auction(models.Model):
     name = models.CharField(max_length=64)
-    price = models.IntegerField()
     current_bid = models.IntegerField()
     creation_date = models.DateTimeField()
     available = models.BooleanField()

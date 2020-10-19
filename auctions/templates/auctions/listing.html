@@ -25,13 +25,10 @@
                     
                 
                 <li>
-                    Starting price: {{listing.price}}
+                    Current bid: {{listing.current_bid}}
                 </li>
                 <li>
                     Date of creation: {{listing.creation_date}}
-                </li>
-                <li>
-                    Current bid: {{listing.current_bid}}
                 </li>
                 {% if user.is_authenticated %}
                     <a href="{% url 'watchlist_add' listing.id %}">Add to Watch List</a>

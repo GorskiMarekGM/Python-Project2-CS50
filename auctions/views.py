@@ -105,21 +105,19 @@ def bid(request):
             auction_id = form.data["auction_id"]
             auction = Auction.objects.get(pk=auction_id)
             auction_bid = auction.current_bid
-            auction_price = auction.price
 
             message =""
             
             listing = Auction.objects.get(pk=auction_id)
 
-            if(bid_price > auction_price):
-                if (bid_price > auction_bid):
-                    auction.current_bid = bid_price
-                    auction.save()
+            if (bid_price > auction_bid):
+                auction.current_bid = bid_price
+                auction.save()
 
-                    bid_obj = Bid(id = getLastPk(Bid),price = bid_price, auction_bid = auction, auctioner = request.user)
-                    bid_obj.save()
+                bid_obj = Bid(id = getLastPk(Bid),price = bid_price, auction_bid = auction, auctioner = request.user)
+                bid_obj.save()
 
-                    messages.add_message(request, messages.INFO, "Successfully placed bid")
+                messages.add_message(request, messages.INFO, "Successfully placed bid")
             else:
                 messages.add_message(request, messages.INFO, "Your bid is lower then current value") 
 
@@ -177,6 +175,7 @@ def create(request):
             category = form.cleaned_data["category"]
             category_obj = Category.objects.get(pk=category)
 
+            
             if(is_img_set):
                 photo = upload(request)
 
@@ -187,10 +186,15 @@ def create(request):
                 "message":message
             })
             
-        new_auction = Auction(id = getLastPk(Auction),name = name,price = price,current_bid = 0,creation_date = date,auction_category = category_obj, available = True, creator= request.user)
+        new_auction = Auction(id = getLastPk(Auction),name = name, current_bid = price,creation_date = date,auction_category = category_obj, available = True, creator= request.user)
         #new_auction.creator = request.user
         #new_auction.available = True
         new_auction.save()
+
+        #create first bid
+        start_bid = Bid(price = price,auction_bid=new_auction, auctioner=request.user)
+        start_bid.save()
+
 
         if(is_img_set):
             new_auction.photos.add(photo)
