@@ -67,7 +67,8 @@ def close(request,listing_id):
     for bid in bids:
         if bid.price == max_price.price:
             winner = bid.auctioner
-            auction = Auction(winner=winner,available=False)
+            auction.winner = winner
+            auction.available = False
             auction.save()
 
     return render(request, "auctions/close.html",{
@@ -154,7 +155,8 @@ def create(request):
             price = form.cleaned_data["price"]
             date = datetime.now()
             category = form.cleaned_data["category"]
-            
+            category_obj = Category.objects.get(pk=category)
+
             if(is_img_set):
                 photo = upload(request)
 
@@ -165,8 +167,9 @@ def create(request):
                 "message":message
             })
             
-        new_auction = Auction(getLastPk(Auction),name,price,0,date,True,category)
-        new_auction.creator = request.user
+        new_auction = Auction(id = getLastPk(Auction),name = name,price = price,current_bid = 0,creation_date = date,auction_category = category_obj, available = True, creator= request.user)
+        #new_auction.creator = request.user
+        #new_auction.available = True
         new_auction.save()
 
         if(is_img_set):

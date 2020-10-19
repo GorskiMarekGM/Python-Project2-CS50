@@ -8,8 +8,9 @@
     <h2>Active Listings</h2>
 
     <ul>
-
+        
         {% for auction in auctions %}
+            {% if auction.available %}
         <a href="{% url 'listing' auction.id %}">
             <div class="listening">
 
@@ -35,7 +36,7 @@
                 {% endif %}
             </div>
         </a>
-            
+            {% endif %}
         {% endfor %}
     </ul>   
 </div>
