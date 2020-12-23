@@ -29,7 +29,8 @@
                 </li>
 
                 {% if user.is_authenticated %}
-                    <a href="{% url 'watchlist_add' auction.id %}">Add to Watch List</a>
+                <br>
+                    <a href="{% url 'watchlist_add' auction.id %}" class="btn btn-primary">Add to Watch List</a>
                 {% endif %}
             </div>
         </a>
