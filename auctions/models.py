@@ -25,6 +25,7 @@ class Auction(models.Model):
     current_bid = models.IntegerField()
     creation_date = models.DateTimeField()
     available = models.BooleanField()
+    description = models.CharField(max_length=64)
     winner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="winner")
     photos = models.ManyToManyField(Photo, related_name='photos', blank=True)
     auction_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")

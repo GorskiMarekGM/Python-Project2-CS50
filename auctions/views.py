@@ -14,6 +14,7 @@ from .models import User, Auction, Category, Bid, Comment, Photo, WatchList
 class EntityForm(forms.Form):
     name = forms.CharField(label = "name")
     price = forms.CharField(label= "price")
+    description = forms.CharField(label= "description")
     category = forms.CharField(label= "category")
 
 class WatchList_Id(forms.Form):
@@ -171,6 +172,7 @@ def create(request):
         if form.is_valid():
             name = form.cleaned_data["name"]
             price = form.cleaned_data["price"]
+            description = form.cleaned_data["description"]
             date = datetime.now()
             category = form.cleaned_data["category"]
             category_obj = Category.objects.get(pk=category)
@@ -186,7 +188,7 @@ def create(request):
                 "message":message
             })
             
-        new_auction = Auction(id = getLastPk(Auction),name = name, current_bid = price,creation_date = date,auction_category = category_obj, available = True, creator= request.user)
+        new_auction = Auction(id = getLastPk(Auction),name = name, current_bid = price, description=description, creation_date = date,auction_category = category_obj, available = True, creator= request.user)
         #new_auction.creator = request.user
         #new_auction.available = True
         new_auction.save()

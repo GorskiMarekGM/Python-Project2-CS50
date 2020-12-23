@@ -11,7 +11,7 @@
         
         {% for auction in auctions %}
             {% if auction.available %}
-        <a href="{% url 'listing' auction.id %}">
+        <a href="{% url 'listing' auction.id %}" style="text-decoration: none;">
             <div class="listening">
 
                 {% for n in auction.photos.all %}
@@ -20,8 +20,7 @@
 
                 <h3>{{auction.name}}</h3>
                     
-                
-            
+                Description: {{auction.description}}
                 <li>
                     Highest Bid: {{auction.current_bid}}
                 </li>
