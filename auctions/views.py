@@ -9,7 +9,7 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 from django.db.models import Max
 
-from .models import User, Auction, Category, Bid, Comment, Photo, WatchList
+from .models import *
 
 class EntityForm(forms.Form):
     name = forms.CharField(label = "name")
@@ -44,6 +44,9 @@ def getLastPk(obj):
 def listing(request, listing_id):
     listing = Auction.objects.get(pk=listing_id)
     comments = Comment.objects.filter(comment_to=listing)
+
+    if(listing.available==False):
+        return redirect('close', listing_id = listing_id)
 
     return render(request, "auctions/listing.html",{
         "listing":listing,
