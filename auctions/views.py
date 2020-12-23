@@ -158,10 +158,9 @@ def watchlist_add(request, auction_id):
 
 def watchlist_remove(request, auction_id):
     if request.user.is_authenticated:
-        user = request.user
-        user_watchlist = WatchList.objects.filter(user=user)[0]
-
-        user_watchlist.auctions.filter(id=auction_id).delete()
+        auction_to_remove = Auction.objects.get(id = auction_id)
+        watchlist = WatchList.objects.get(user = request.user).auctions.remove(auction_to_remove)
+        
 
     return redirect('watchlist')
 
